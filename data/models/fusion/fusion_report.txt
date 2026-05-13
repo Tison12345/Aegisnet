@@ -1,0 +1,142 @@
+
+=======================================================
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+=== FUSION TEST RESULTS ===
+=
+
+Sequences evaluated: 149
+  (alert=66, drowsy=83)
+
+Individual stream accuracy on these sequences:
+  Face TCN  : 0.9866
+  Body STGCN: 0.9799
+
+Fused model accuracy : 0.9933
+Fused model F1 (wtd) : 0.9933
+
+Avg learned attention weights:
+  w_face = 0.644   w_body = 0.356  (sum=1.000)
+
+Confusion matrix (rows=actual, cols=predicted):
+             alert  drowsy
+  alert         65       1
+  drowsy         0      83
+
+Classification report:
+              precision    recall  f1-score   support
+
+       alert       1.00      0.98      0.99        66
+      drowsy       0.99      1.00      0.99        83
+
+    accuracy                           0.99       149
+   macro avg       0.99      0.99      0.99       149
+weighted avg       0.99      0.99      0.99       149
+
+Model saved -> C:\Ageisnet\data\models\fusion\best_fusion.pt

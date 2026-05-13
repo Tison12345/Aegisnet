@@ -1,0 +1,55 @@
+.claude/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+.idea/
+*.tmp
+dist/
+build/
+*.egg-info/
+.ipynb_checkpoints
+
+# Dataset — too large for git (re-download from Kaggle)
+data/processed/
+data/raw/
+
+# Large generated CSVs — re-run extraction scripts to regenerate
+data/features.csv
+data/train.csv
+data/test.csv
+data/pose_features.csv
+data/pose_train.csv
+data/pose_test.csv
+
+# Downloaded model weights (re-download automatically on first run)
+models/face_landmarker.task
+models/*.pt
+models/*.task
+
+# Duplicate model folder at repo root (canonical copies are in data/models/)
+/models/

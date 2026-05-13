@@ -1,0 +1,17 @@
+=== TCN Test Results ===
+
+Window=45  Stride=15  Channels=[64, 64, 128, 128]
+
+              precision    recall  f1-score   support
+
+       alert       0.99      1.00      0.99       257
+      drowsy       1.00      0.99      0.99       295
+
+    accuracy                           0.99       552
+   macro avg       0.99      0.99      0.99       552
+weighted avg       0.99      0.99      0.99       552
+
+Confusion matrix (rows=actual, cols=predicted):
+             alert   drowsy
+  alert        257        0
+  drowsy         3      292
