@@ -21,6 +21,7 @@
   - [Step 6 — ArcFace Identity Verification](#step-6--arcface-identity-verification)
   - [Step 7 — ONNX Export and INT8 Quantisation](#step-7--onnx-export-and-int8-quantisation)
 - [Live Webcam Demo](#live-webcam-demo)
+- [Behavioral Biometric Verification](#behavioral-biometric-verification)
 - [Model Performance Summary](#model-performance-summary)
 - [ONNX Deployment Benchmarks](#onnx-deployment-benchmarks)
 - [Key Design Decisions](#key-design-decisions)
@@ -32,7 +33,9 @@
 Ageisnet is designed for real-world carpooling platforms. It runs two parallel AI streams on every video frame:
 
 1. **Drowsiness Detection** — monitors the driver's face and body posture in real time and emits a continuous Safety Score (0 = fully drowsy, 1 = fully alert).
-2. **Identity Verification** — confirms at ride start that the registered driver is the person behind the wheel using ArcFace face recognition.
+2. **Identity Verification** — two independent methods:
+   - **ArcFace (appearance)** — 512-d face embedding, cosine similarity ≥ 0.85
+   - **Behavioral Biometric (dynamics)** — 256-d penultimate TCN + ST-GCN embedding capturing unique facial dynamics and skeletal motion patterns over 45 frames
 
 All models are exported to ONNX with INT8 quantisation for deployment on mid-range smartphone CPUs without a GPU.
 
@@ -116,7 +119,8 @@ Ageisnet/
 │   ├── step5_fusion.py                # Attention-weighted fusion of both streams
 │   ├── step6_identity_verification.py # ArcFace registration and verification
 │   ├── step7_onnx_quantize.py         # ONNX export + INT8 quantisation + benchmark
-│   └── live_identity.py               # Live webcam registration / verification
+│   ├── live_identity.py               # Live webcam ArcFace registration / verification
+│   └── live_biometric_id.py           # Live behavioral biometric via TCN+ST-GCN embeddings
 │
 ├── data/
 │   ├── models/
@@ -138,7 +142,8 @@ Ageisnet/
 │   │       ├── best_fusion.onnx       # Fusion FP32 ONNX
 │   │       └── best_fusion_int8.onnx  # Fusion INT8 ONNX
 │   └── identity/
-│       └── *_embedding.npy            # Saved 512-d ArcFace embeddings per driver
+│       ├── *_embedding.npy            # 512-d ArcFace face embeddings (live_identity.py)
+│       └── *_biometric.npy            # 256-d behavioral biometric vectors (live_biometric_id.py)
 │
 ├── models/                            # MediaPipe model files (downloaded on first run)
 ├── .gitignore
@@ -411,6 +416,58 @@ Opens your webcam for real-time face registration and verification:
 5. Press `Q` to quit
 
 If webcam doesn't open, change `cv2.VideoCapture(0)` to `cv2.VideoCapture(1)` in the script.
+
+---
+
+## Behavioral Biometric Verification
+
+```bash
+python scripts/live_biometric_id.py
+```
+
+A second, deeper form of identity verification that reuses the already-trained TCN and ST-GCN models — no new model required. The insight is that both models learned person-discriminating representations while training for drowsiness detection. The penultimate layer (128-d vector just before the final classifier head) encodes behavioral dynamics unique to each person.
+
+**How it works:**
+
+```
+45 webcam frames
+       |
+  +----+----+
+  |         |
+Face seq   Pose seq
+(45x5)     (45x33x4)
+  |         |
+TCN         ST-GCN
+penultimate penultimate
+(128-d)     (128-d)
+  |         |
+  +----+----+
+       |
+   concat + L2-norm
+       |
+   256-d biometric vector
+       |
+  cosine similarity >= 0.80 --> Verified
+  cosine similarity <  0.80 --> Access Denied
+```
+
+**What each stream captures:**
+- **TCN (face)** — temporal patterns in EAR, MAR, and head-pose angles unique to how a specific person moves their face
+- **ST-GCN (body)** — skeletal motion patterns across 33 joints over 3 seconds, capturing posture and micro-movement signatures
+
+**Flow:**
+1. Terminal asks `Enter your name:`
+2. Webcam opens with live progress bar (45 frames captured automatically)
+3. First run — **Registration**: saves `data/identity/{name}_biometric.npy`
+4. Later runs — **Verification**: cosine similarity shown on screen in green or red
+5. Press `Q` to quit at any time
+
+**Comparison of the two identity approaches:**
+
+| Method | Script | Embedding | Threshold | What it captures |
+|---|---|---|---|---|
+| ArcFace | `live_identity.py` | 512-d face | 0.85 | Facial appearance (static) |
+| Behavioral | `live_biometric_id.py` | 256-d TCN+ST-GCN | 0.80 | Facial + skeletal dynamics (temporal) |
 
 ---
 
