@@ -62,7 +62,7 @@ Live Camera Feed
                   Safety Score
                   (0.0 – 1.0)
                        |
-            >= 0.5  Alert / < 0.5  Drowsy
+            >= 0.5  (Alert) / < 0.5  (Drowsy)
                        |
                   + Identity
                   Verification
